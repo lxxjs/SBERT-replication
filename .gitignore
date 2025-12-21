@@ -1,0 +1,4 @@
+.DS_Store
+.vscode/
+data/multinli_1.0
+data/snli_1.0
