@@ -43,8 +43,7 @@ def load_hf_weights(jit_model, hf_model_name):
                 # RoBERTa 权重从 index 2 开始才是位置 0 (index 0,1 是 pad/reserved)
                 shift = 2 
                 if pt_np.shape[0] > shift:
-                    # 提取有效的位置权重 (从第 2 行开始)
-                    # pt_np 形状 (514, 768) -> valid_weights (512, 768)
+                    # pt_np (514, 768) -> valid_weights (512, 768)
                     valid_weights = pt_np[shift:, :]
                     
                     if param.shape[0] == valid_weights.shape[0]:
@@ -57,20 +56,12 @@ def load_hf_weights(jit_model, hf_model_name):
                     else:
                         pt_np = valid_weights[:param.shape[0], :]
 
-            # RoBERTa token_type_embeddings 可能只有 1 行，而 BERT 有 2 行
+            # token_type_embeddings 对 RoBERTa 可能只有 1 行，而 BERT 有 2 行
             if "token_type_embeddings" in key:
                 if param.shape[0] == 2 and pt_np.shape[0] == 1:
-                    # 复制一行，使得 index 0 和 1 都有权重 (全 0)
+                    # 复制一行，使得 index 0 和 1 都有权重
                     pt_np = np.concatenate([pt_np, pt_np], axis=0)
 
-            if param.shape != pt_np.shape:
-                # 处理 Linear 层转置问题 (PyTorch Linear 是 [out, in]，Jittor 是 [in, out])
-                if len(param.shape) == 2 and len(pt_np.shape) == 2 and param.shape == pt_np.T.shape:
-                    pt_np = pt_np.T
-                else:
-                    print(f"Skipping {key}: Shape mismatch {param.shape} vs {pt_np.shape}")
-                    continue
-            
             param.assign(pt_np)
             loaded_cnt += 1
         else:

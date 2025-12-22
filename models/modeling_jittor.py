@@ -34,7 +34,6 @@ class JittorEmbeddings(nn.Module):
 
         words_embeddings = self.word_embeddings(input_ids)
         
-        # 对于 RoBERTa，手动指定 padding_idx=1
         if self.padding_idx is not None:
             pad_mask = (input_ids == self.padding_idx)
             words_embeddings[pad_mask] = 0.0
