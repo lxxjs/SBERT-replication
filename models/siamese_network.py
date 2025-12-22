@@ -12,8 +12,7 @@ class SiameseSBERT(nn.Module):
         u = self.sbert(inputs_a['input_ids'], inputs_a['attention_mask'])
         v = self.sbert(inputs_b['input_ids'], inputs_b['attention_mask'])
         
-        abs_diff = jt.abs(u - v)
-        features = jt.contrib.concat([u, v, abs_diff], dim=1)
+        features = jt.contrib.concat([u, v, jt.abs(u - v)], dim=1)
         
         logits = self.classifier(features)
         

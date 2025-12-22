@@ -14,8 +14,8 @@ def train():
     
     tokenizer = AutoTokenizer.from_pretrained(model_path)
     nli_data_paths = [
-        'data/snli_1.0/snli_1.0_train.jsonl',         # SNLI 训练集
-        'data/multinli_1.0/multinli_1.0_train.jsonl'  # MultiNLI 训练集
+        'data/snli_1.0/snli_1.0_train.jsonl',
+        'data/multinli_1.0/multinli_1.0_train.jsonl'
     ]
     train_samples = load_nli_data(nli_data_paths, limit=5000)
     train_dataset = NLIDataset(train_samples, tokenizer)
@@ -27,7 +27,7 @@ def train():
     mnli_dev_samples = load_nli_data(['data/multinli_1.0/multinli_1.0_dev_matched.jsonl'], limit=500)
     mnli_dev_dataset = NLIDataset(mnli_dev_samples, tokenizer)
 
-    # 训练循环（仅 1 Epoch）
+    # 训练循环（1 Epoch）
     model.train()
     for batch_idx, (in_a, in_b, labels) in enumerate(train_loader):
         loss, logits = model(in_a, in_b, labels)
