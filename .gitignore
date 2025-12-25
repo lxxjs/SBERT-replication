@@ -3,6 +3,8 @@
 data
 models/bert-large-uncased
 models/roberta-base
+models/SBERT-large-uncased.pkl
+models/SRoBERTa-base.pkl
 venv
 __pycache__
 sanity_check.py
