@@ -9,9 +9,10 @@ STS_DATASETS = {
     "STS14": "mteb/sts14-sts",
     "STS15": "mteb/sts15-sts",
     "STS16": "mteb/sts16-sts",
-    "STSb":  "sentence-transformers/stsb",
-    "SICK-R":"mteb/sickr-sts",
+    "STSb":  "mteb/stsbenchmark-sts",
+    "SICK-R": "mteb/sickr-sts",
 }
+
 
 def cosine_similarity(a, b):
     a = a / jt.norm(a, dim=1, keepdim=True)
@@ -53,6 +54,8 @@ def main():
     model = load_sbert_model(
         checkpoint_path="models/SRoBERTa-base.pkl",
         model_path="roberta-base",
+        # checkpoint_path="models/SBERT-large-uncased.pkl",
+        # model_path="bert-large-uncased",
         pooling="mean",
         strict=True
     )
